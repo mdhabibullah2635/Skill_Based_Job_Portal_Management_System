@@ -25,7 +25,7 @@ ALLOWED_HOSTS = ["*"]
 # CSRF SETTINGS
 # ------------------------
 CSRF_TRUSTED_ORIGINS = [
-    "https://job-portal-dti-w9mw.onrender.com",
+    "https://skill-based-job-portal-management-system.onrender.com",
     "http://127.0.0.1:8000",
 ]
 
