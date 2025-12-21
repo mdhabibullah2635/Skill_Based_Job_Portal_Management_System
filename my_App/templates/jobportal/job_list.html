@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% block title %}Browse Jobs - Job Portal{% endblock %}
+
+{% block content %}
+<style>
+/* ===== PAGE LAYOUT ===== */
+.page-wrapper {
+    min-height: 80vh;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* ===== COMMON CARD STYLING ===== */
+.card {
+    border-radius: 1.5rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0,0,0,.12);
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* ===== BADGES ===== */
+.badge {
+    border-radius: 50px;
+    padding: .4rem .8rem;
+    font-weight: 500;
+}
+
+.skill-badge {
+    background: linear-gradient(135deg, #6366f1, #3b82f6);
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+}
+
+/* ===== SEARCH CARD ===== */
+.search-card {
+    background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee);
+    color: #fff;
+}
+
+.search-card .form-control,
+.search-card .form-select {
+    border-radius: 50px;
+    padding: .6rem 1rem;
+    border: none;
+}
+
+/* placeholder color white */
+.search-card ::placeholder {
+    color: rgba(255,255,255,.8);
+}
+
+/* ===== CTA CARD ===== */
+.cta-card {
+    background: linear-gradient(135deg, #22c55e, #3b82f6);
+    color: #fff;
+    border-radius: 1.5rem;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.cta-card .btn {
+    font-weight: 600;
+    padding: .6rem 1.2rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 576px){
+    .text-md-end {
+        text-align: left !important;
+        margin-top: 1rem;
+    }
+}
+</style>
+
+<div class="page-wrapper container">
+
+    <!-- 🔍 SEARCH -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card search-card p-3">
+                <form method="get" class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label">
+                            <i class="fas fa-search me-1"></i>Search Jobs
+                        </label>
+                        <input type="text" name="search" value="{{ search_query|default:'' }}"
+                               class="form-control" placeholder="Title, description, skills">
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <i class="fas fa-filter me-1"></i>Category
+                        </label>
+                        <select name="category" class="form-select">
+                            <option value="">All Categories</option>
+                            {% for value, label in categories %}
+                                <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+                        <button class="btn btn-dark">
+                            <i class="fas fa-search me-1"></i>Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📄 HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap">
+        <h4 class="fw-bold mb-2 mb-md-0">
+            <i class="fas fa-briefcase me-2 text-primary"></i>
+            {% if search_query or selected_category %}Search Results{% else %}All Jobs{% endif %}
+            <span class="badge bg-primary">{{ jobs.count }}</span>
+        </h4>
+
+        {% if user.is_authenticated and user.userprofile.user_type == 'recruiter' %}
+            <a href="{% url 'post_job' %}" class="btn btn-success">
+                <i class="fas fa-plus me-1"></i>Post Job
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- 💼 JOB LIST -->
+    {% if jobs %}
+        {% for job in jobs %}
+            <div class="card job-card mb-4 p-3">
+                <div class="row g-3 align-items-center">
+
+                    <div class="col-md-8">
+                        <h5 class="text-primary fw-bold">{{ job.title }}</h5>
+
+                        <p class="text-muted small mb-2">
+                            <i class="fas fa-building me-1"></i>{{ job.recruiter.company_name|default:"Company" }} ·
+                            <i class="fas fa-tag me-1"></i>{{ job.get_category_display }} ·
+                            <i class="fas fa-users me-1"></i>{{ job.number_of_openings }} opening{{ job.number_of_openings|pluralize }}
+                        </p>
+
+                        <p>{{ job.description|truncatewords:25 }}</p>
+
+                        <div class="mb-2">
+                            {% for skill in job.get_required_skills_list %}
+                                <span class="badge skill-badge me-1">{{ skill|title }}</span>
+                            {% endfor %}
+                        </div>
+
+                        <small class="text-muted">
+                            <i class="fas fa-calendar me-1"></i>{{ job.created_at|date:"M d, Y" }}
+                        </small>
+                    </div>
+
+                    <div class="col-md-4 text-md-end">
+                        {% if user.is_authenticated %}
+                            {% if user.userprofile.user_type == 'jobseeker' %}
+                                <a href="{% url 'apply_job' job.id %}" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-1"></i>Apply
+                                </a>
+                            {% else %}
+                                <span class="badge bg-info">Your Job</span>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-primary">
+                                Login to Apply
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h5>No Jobs Found</h5>
+                <p class="text-muted">Try adjusting search or filters</p>
+                <a href="{% url 'job_list' %}" class="btn btn-primary">
+                    <i class="fas fa-list me-1"></i>View All Jobs
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- 🎯 CTA -->
+    {% if user.is_authenticated and user.userprofile.user_type == 'jobseeker' %}
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card cta-card">
+                    <h5 class="fw-bold mb-2">
+                        <i class="fas fa-magic me-2"></i>Find Better Matches
+                    </h5>
+                    <p>Get personalized job recommendations</p>
+                    <a href="{% url 'skill_match' %}" class="btn btn-light me-2">
+                        Skill Match
+                    </a>
+                    <a href="{% url 'profile' %}" class="btn btn-outline-light">
+                        Update Profile
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block title %}Register | JobPortal{% endblock %}
+
+{% block content %}
+<style>
+.auth-wrapper {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+}
+
+.auth-card {
+    border-radius: 2rem;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,.08);
+}
+
+.auth-header {
+    background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee);
+    color: #fff;
+}
+
+.auth-btn {
+    border-radius: 50px;
+    padding: .7rem;
+}
+</style>
+
+<div class="auth-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-6 col-xl-5">
+
+                <div class="card auth-card">
+                    <div class="card-header auth-header text-center py-4">
+                        <h4 class="mb-0">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </h4>
+                        <p class="mb-0 small opacity-75">
+                            Join JobPortal and grow your career
+                        </p>
+                    </div>
+
+                    <div class="card-body p-4">
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                    {{ message }}
+                                    <button class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label class="form-label">Username</label>
+                                <input type="text" name="username"
+                                       class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                                       value="{{ form.username.value|default:'' }}"
+                                       placeholder="Enter username">
+                                {% for error in form.username.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Display Name</label>
+                                <input type="text" name="display_name"
+                                       class="form-control {% if form.display_name.errors %}is-invalid{% endif %}"
+                                       value="{{ form.display_name.value|default:'' }}"
+                                       placeholder="Your full name">
+                                {% for error in form.display_name.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email"
+                                       class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                                       value="{{ form.email.value|default:'' }}"
+                                       placeholder="example@email.com">
+                                {% for error in form.email.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">User Type</label>
+                                <select name="user_type"
+                                        class="form-select {% if form.user_type.errors %}is-invalid{% endif %}">
+                                    <option value="">Select account type</option>
+                                    <option value="recruiter" {% if form.user_type.value == 'recruiter' %}selected{% endif %}>Recruiter</option>
+                                    <option value="jobseeker" {% if form.user_type.value == 'jobseeker' %}selected{% endif %}>Job Seeker</option>
+                                </select>
+                                {% for error in form.user_type.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Password</label>
+                                <input type="password" name="password1"
+                                       class="form-control {% if form.password1.errors %}is-invalid{% endif %}"
+                                       placeholder="Create password">
+                                {% for error in form.password1.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Confirm Password</label>
+                                <input type="password" name="password2"
+                                       class="form-control {% if form.password2.errors %}is-invalid{% endif %}"
+                                       placeholder="Repeat password">
+                                {% for error in form.password2.errors %}
+                                    <div class="invalid-feedback">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+
+                            <div class="d-grid">
+                                <button class="btn btn-primary btn-lg auth-btn">
+                                    <i class="fas fa-user-plus me-2"></i>Create Account
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="card-footer text-center bg-light">
+                        <small>
+                            Already have an account?
+                            <a href="{% url 'login' %}" class="text-decoration-none">Login</a>
+                        </small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

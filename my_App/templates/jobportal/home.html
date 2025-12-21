@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}Home | JobPortal{% endblock %}
+
+{% block content %}
+
+<style>
+.hero {
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+}
+
+.hero-btn {
+    border-radius: 50px;
+    padding: 0.75rem 2rem;
+}
+
+.gradient-box {
+    background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee);
+    border-radius: 2rem;
+    color: #fff;
+    padding: 3rem 2rem;
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, #6366f1, #ec4899, #22d3ee);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+</style>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <div class="row align-items-center g-5">
+
+            <div class="col-lg-6 text-center text-lg-start" data-aos="fade-right">
+                <h1 class="display-5 fw-bold text-gradient mb-4">
+                    Find Your Dream Job Today
+                </h1>
+
+                <p class="lead text-muted mb-4">
+                    Smart job matching platform for job seekers and recruiters.
+                </p>
+
+                <div class="d-flex gap-3 flex-wrap justify-content-center justify-content-lg-start">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'register' %}" class="btn btn-primary hero-btn">Get Started</a>
+                        <a href="{% url 'job_list' %}" class="btn btn-outline-primary hero-btn">Browse Jobs</a>
+                    {% else %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary hero-btn">Dashboard</a>
+                        <a href="{% url 'skill_match' %}" class="btn btn-outline-primary hero-btn">Skill Match</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-6 text-center" data-aos="fade-left">
+                <div class="gradient-box shadow-lg">
+                    <i class="fas fa-briefcase fa-4x mb-3"></i>
+                    <h3>Your Career Starts Here</h3>
+                    <p class="mb-0">Thousands of jobs. One perfect match.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- WHY CHOOSE -->
+<section class="container my-5" data-aos="fade-up">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-gradient">Why Choose JobPortal?</h2>
+        <p class="text-muted">Built for performance, scale, and simplicity</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 text-center p-4">
+                <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                <h5>Job Seekers</h5>
+                <p class="text-muted">Smart matching based on skills and experience.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 text-center p-4">
+                <i class="fas fa-building fa-3x text-primary mb-3"></i>
+                <h5>Recruiters</h5>
+                <p class="text-muted">Post jobs and manage applications easily.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 text-center p-4">
+                <i class="fas fa-magic fa-3x text-primary mb-3"></i>
+                <h5>Smart Matching</h5>
+                <p class="text-muted">AI-ready architecture for future upgrades.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

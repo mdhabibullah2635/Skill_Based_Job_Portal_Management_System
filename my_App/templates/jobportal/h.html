@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% block title %}Home - Job Portal{% endblock %}
+
+{% block content %}
+<!-- AOS CSS -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+<style>
+/* ===== GLOBAL STYLES ===== */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(180deg, #f0f9ff 0%, #fffaf0 100%);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+h1,h2,h3,h5 {
+    font-weight: 600;
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, #6366f1, #ec4899, #22d3ee);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textFlow 5s linear infinite;
+}
+
+@keyframes textFlow {
+    to { background-position: 200% center; }
+}
+
+/* ===== HERO SECTION ===== */
+.hero-section {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top left, #f0f9ff 0%, #ffffff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Floating soft circles */
+.hero-section::before,
+.hero-section::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.3;
+    animation: floatMove 15s infinite alternate ease-in-out;
+}
+
+.hero-section::before {
+    width: 400px; height: 400px;
+    background: rgba(99,102,241,0.3);
+    top: -100px; left: -150px;
+}
+
+.hero-section::after {
+    width: 400px; height: 400px;
+    background: rgba(236,72,153,0.3);
+    bottom: -100px; right: -150px;
+}
+
+@keyframes floatMove {
+    0% { transform: translate(0,0) scale(1); }
+    50% { transform: translate(30px,-30px) scale(1.05); }
+    100% { transform: translate(0,0) scale(1); }
+}
+
+.hero-content { position: relative; z-index: 5; }
+
+.hero-text { animation: fadeUp 1.2s ease-out; }
+
+@keyframes fadeUp {
+    from { opacity:0; transform: translateY(50px); }
+    to { opacity:1; transform: translateY(0); }
+}
+
+.hero-btn {
+    transition: all 0.4s ease-in-out;
+    border-radius: 50px;
+    padding: 0.8rem 2rem;
+    font-weight: 500;
+    background: linear-gradient(90deg, #6366f1, #ec4899, #22d3ee);
+    color: #fff;
+    border: none;
+    box-shadow: 0 6px 20px rgba(99,102,241,0.3);
+    background-size: 300% 100%;
+    animation: btnGradient 6s ease infinite;
+}
+
+.hero-btn:hover,
+.hero-btn:focus {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(99,102,241,0.5);
+}
+
+@keyframes btnGradient {
+    0% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+    100% { background-position: 0% center; }
+}
+
+/* ===== GRADIENT BOX RIGHT ===== */
+.gradient-box {
+    background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee);
+    background-size: 300% 300%;
+    color: white;
+    border-radius: 2rem;
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(99,102,241,0.2);
+    transition: transform 0.5s ease, box-shadow 0.5s ease, background-position 0.5s ease;
+    cursor: pointer;
+}
+
+.gradient-box:hover,
+.gradient-box:active {
+    transform: scale(1.05);
+    box-shadow: 0 18px 50px rgba(99,102,241,0.35);
+    background-position: 100% 50%;
+}
+
+.gradient-box h3, .gradient-box p {
+    transition: transform 0.5s ease;
+}
+
+.gradient-box:hover h3, .gradient-box:hover p,
+.gradient-box:active h3, .gradient-box:active p {
+    transform: translateY(-5px);
+}
+
+/* ===== WHY CHOOSE SECTION ===== */
+.why-section {
+    margin-top: 80px;
+    padding: 60px 30px;
+    border-radius: 1.8rem;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 10px 35px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+}
+
+.why-section::before,
+.why-section::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+}
+
+.why-section::before {
+    background: radial-gradient(circle, rgba(236,72,153,0.2), transparent 80%);
+    top: -40px;
+    left: -80px;
+}
+
+.why-section::after {
+    background: radial-gradient(circle, rgba(99,102,241,0.2), transparent 80%);
+    bottom: -40px;
+    right: -80px;
+}
+
+.card {
+    border: none;
+    border-radius: 1.4rem;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    transition: all 0.4s ease;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(99,102,241,0.15), rgba(236,72,153,0.15));
+    transform: skewX(-25deg);
+    transition: all 0.5s ease;
+}
+
+.card:hover::before,
+.card:active::before { left: 100%; }
+
+.card:hover,
+.card:active {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(99,102,241,0.2);
+}
+
+.card i {
+    transition: transform 0.4s ease, color 0.4s ease;
+}
+
+.card:hover i,
+.card:active i {
+    transform: scale(1.2);
+    color: #ec4899;
+}
+
+.card-title { color: #111827; font-weight: 600; }
+.card-text { color: #4b5563; }
+
+/* Prevent text jump on mobile tap */
+@media (hover: none) and (pointer: coarse) {
+    .card h5,
+    .card p {
+        transform: none !important;
+    }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .hero-section { text-align: center; flex-direction: column; }
+    .gradient-box { margin-top: 1.5rem; }
+    .hero-btn { width: 100%; justify-content: center; }
+}
+</style>
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero-section">
+    <div class="container hero-content">
+        <div class="row align-items-center">
+            <div class="col-lg-6 hero-text" data-aos="fade-right">
+                <h1 class="display-4 fw-bold text-gradient mb-4">
+                    Find Your Dream Job Today
+                </h1>
+                <p class="lead text-muted mb-4">
+                    Connect with top employers and discover opportunities that match your skills.
+                    Whether you're a recruiter or a job seeker, we’ve got you covered.
+                </p>
+                <div class="d-flex gap-3 flex-wrap justify-content-lg-start justify-content-center">
+                    {% if not user.is_authenticated %}
+                        <a href="{% url 'register' %}" class="btn btn-primary btn-lg hero-btn">
+                            <i class="fas fa-user-plus me-2"></i>Get Started
+                        </a>
+                        <a href="{% url 'job_list' %}" class="btn btn-outline-primary btn-lg hero-btn">
+                            <i class="fas fa-search me-2"></i>Browse Jobs
+                        </a>
+                    {% else %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg hero-btn">
+                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                        </a>
+                        <a href="{% url 'skill_match' %}" class="btn btn-outline-primary btn-lg hero-btn">
+                            <i class="fas fa-magic me-2"></i>Skill Match
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-6 text-center" data-aos="fade-left">
+                <div class="gradient-box">
+                    <i class="fas fa-briefcase fa-5x mb-3"></i>
+                    <h3>Your Career Journey Starts Here</h3>
+                    <p class="mb-0">Join thousands of professionals finding their perfect match.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== WHY CHOOSE SECTION ===== -->
+<section class="why-section container text-center" data-aos="fade-up">
+    <div class="col-12 mb-5">
+        <h2 class="fw-bold text-gradient">Why Choose JobPortal?</h2>
+        <p class="text-muted">Smart tools to connect the right people with the right opportunities.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
+            <div class="card h-100 p-4">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">For Job Seekers</h5>
+                    <p class="card-text">
+                        Create your profile, upload your resume, and get matched with jobs 
+                        that fit your skills perfectly.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
+            <div class="card h-100 p-4">
+                <div class="card-body">
+                    <i class="fas fa-building fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">For Recruiters</h5>
+                    <p class="card-text">
+                        Post job openings, manage applications, and find the right candidates 
+                        with our smart matching system.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" data-aos="zoom-in" data-aos-delay="300">
+            <div class="card h-100 p-4">
+                <div class="card-body">
+                    <i class="fas fa-magic fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">Smart Matching</h5>
+                    <p class="card-text">
+                        Our intelligent algorithm matches candidates with jobs based on 
+                        skills, experience, and preferences.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- AOS JS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+AOS.init({ duration: 1000, once: true });
+</script>
+
+{% endblock %}

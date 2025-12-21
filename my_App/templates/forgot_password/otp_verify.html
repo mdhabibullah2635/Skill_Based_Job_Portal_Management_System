@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}OTP Verification - Job Portal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white text-center">
+                <h4 class="mb-0"><i class="fas fa-key me-2"></i>OTP Verification</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="otp" class="form-label"><i class="fas fa-lock me-1"></i>Enter OTP</label>
+                        <input type="text" class="form-control" id="otp" name="otp" placeholder="Enter the OTP sent to your email" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-check me-2"></i>Verify OTP</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{% url 'forgot_password' %}" class="text-decoration-none">Back to Forgot Password</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
